@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>PagSeguro - Token Cartão</title>
-  <script src="https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js"></script>
+  <script src="https://assets.pagseguro.com.br/checkout-sdk-js/dist/browser/pagseguro.min.js"></script>
 </head>
 <body>
   <h2>Gerar Token do Cartão</h2>
@@ -46,13 +46,17 @@
       };
   
       try {
-        const encrypted = await PagSeguro.encryptCard({ publicKey, card });
-        console.log("Encrypted Card:", encrypted.encryptedCard);
-        document.getElementById('tokenResult').innerText = "Token criptografado: " + encrypted.encryptedCard;
-      } catch (error) {
-        console.error("Erro ao criptografar cartão:", error);
-        document.getElementById('tokenResult').innerText = "Erro ao criptografar cartão. Veja o console.";
-      }
+  console.log("PagSeguro:", PagSeguro);
+  console.log("encryptCard existe:", typeof PagSeguro.encryptCard);
+
+  const encrypted = await PagSeguro.encryptCard({ publicKey, card });
+  console.log("Encrypted Card:", encrypted.encryptedCard);
+  document.getElementById('tokenResult').innerText = "Token criptografado: " + encrypted.encryptedCard;
+} catch (error) {
+  console.error("Erro ao criptografar cartão:", error);
+  document.getElementById('tokenResult').innerText = "Erro ao criptografar cartão. Veja o console.";
+}
+
     });
   </script>
   
