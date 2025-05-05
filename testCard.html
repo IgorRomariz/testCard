@@ -30,11 +30,22 @@
   <p id="tokenResult"></p>
 
   <script>
-    const publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuArACPk8CEz+K/xDHv4jUBO24/RC4IqVTnowiGXyMnxzFlePt98n+vNvkB4xfMoeiQ1897UWngIVsfHKHcjCt7T5c+GhuFzTdm3SG/IucG6g+IuEBH1SLM/wpj83YMUZzwYFYfDDyaC7UToGDyqq+VXBZtsl0XEDZzHe1i/B3y0ZFP4SHh8hkFrwLxj66ycvtVou/5sXX1OdTby2E9rVYOhrypqBT7IUHutmTYOrJ/n/kegKql/H/v/BDBR4yay51N7e4NnOOozrMHxha679kJozsTckB1iWeNcuiqmvrwBuJRNOlm//q1AmchTXCrjidQFATt/pLNS3YDiPMR4TPwIDAQAB'; // substitua pela sua chave pública
-
+    const publicKey = `MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuArACPk8CEz+K/xDHv4jUBO24/RC4IqVTnowiGXyMnxzFlePt98n+vNvkB4xfMoeiQ1897UWngIVsfHKHcjCt7T5c+GhuFzTdm3SG/IucG6g+IuEBH1SLM/wpj83YMUZzwYFYfDDyaC7UToGDyqq+VXBZtsl0XEDZzHe1i/B3y0ZFP4SHh8hkFrwLxj66ycvtVou/5sXX1OdTby2E9rVYOhrypqBT7IUHutmTYOrJ/n/kegKql/H/v/BDBR4yay51N7e4NnOOozrMHxha679kJozsTckB1iWeNcuiqmvrwBuJRNOlm//q1AmchTXCrjidQFATt/pLNS3YDiPMR4TPwIDAQAB`;
+  
+    async function initializePagSeguro() {
+      try {
+        await PagSeguro.init({ publicKey });
+        console.log("PagSeguro init OK");
+      } catch (err) {
+        console.error("Erro ao iniciar PagSeguro:", err);
+      }
+    }
+  
+    initializePagSeguro();
+  
     document.getElementById('card-form').addEventListener('submit', async function (e) {
       e.preventDefault();
-
+  
       const card = {
         number: document.getElementById('cardNumber').value,
         exp_month: document.getElementById('expMonth').value,
@@ -44,7 +55,7 @@
           name: document.getElementById('holderName').value
         }
       };
-
+  
       try {
         const encrypted = await PagSeguro.encryptCard({ publicKey, card });
         document.getElementById('tokenResult').innerText = "Token criptografado: " + encrypted.encryptedCard;
@@ -55,5 +66,6 @@
       }
     });
   </script>
+  
 </body>
 </html>
