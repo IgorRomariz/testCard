@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>PagSeguro - Token Cartão</title>
+  <script src="https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js"></script>
+</head>
+<body>
+  <h2>Gerar Token do Cartão</h2>
+
+  <form id="card-form">
+    <label>Nome impresso no cartão:</label><br>
+    <input type="text" id="holderName" required><br><br>
+
+    <label>Número do cartão:</label><br>
+    <input type="text" id="cardNumber" required><br><br>
+
+    <label>Mês de vencimento:</label><br>
+    <input type="text" id="expMonth" placeholder="MM" required><br><br>
+
+    <label>Ano de vencimento:</label><br>
+    <input type="text" id="expYear" placeholder="AAAA" required><br><br>
+
+    <label>CVV:</label><br>
+    <input type="text" id="cvv" required><br><br>
+
+    <button type="submit">Gerar Token</button>
+  </form>
+
+  <p id="tokenResult"></p>
+
+  <script>
+    const publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuArACPk8CEz+K/xDHv4jUBO24/RC4IqVTnowiGXyMnxzFlePt98n+vNvkB4xfMoeiQ1897UWngIVsfHKHcjCt7T5c+GhuFzTdm3SG/IucG6g+IuEBH1SLM/wpj83YMUZzwYFYfDDyaC7UToGDyqq+VXBZtsl0XEDZzHe1i/B3y0ZFP4SHh8hkFrwLxj66ycvtVou/5sXX1OdTby2E9rVYOhrypqBT7IUHutmTYOrJ/n/kegKql/H/v/BDBR4yay51N7e4NnOOozrMHxha679kJozsTckB1iWeNcuiqmvrwBuJRNOlm//q1AmchTXCrjidQFATt/pLNS3YDiPMR4TPwIDAQAB'; // substitua pela sua chave pública
+
+    document.getElementById('card-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const card = {
+        number: document.getElementById('cardNumber').value,
+        exp_month: document.getElementById('expMonth').value,
+        exp_year: document.getElementById('expYear').value,
+        security_code: document.getElementById('cvv').value,
+        holder: {
+          name: document.getElementById('holderName').value
+        }
+      };
+
+      try {
+        const encrypted = await PagSeguro.encryptCard({ publicKey, card });
+        document.getElementById('tokenResult').innerText = "Token criptografado: " + encrypted.encryptedCard;
+        console.log("Encrypted Card:", encrypted.encryptedCard);
+      } catch (error) {
+        console.error("Erro ao criptografar cartão:", error);
+        document.getElementById('tokenResult').innerText = "Erro ao criptografar cartão. Veja o console.";
+      }
+    });
+  </script>
+</body>
+</html>
